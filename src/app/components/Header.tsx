@@ -46,7 +46,7 @@ const Header = ({ showSidebarButton = true, onShowSidebar }: Props) => {
 
         <Flex>
           <Button
-            mr={4}
+            mr={2}
             as={Link}
             size={"sm"}
             variant={"solid"}
