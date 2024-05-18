@@ -35,6 +35,12 @@ git clone https://github.com/guimachadooo/rbr-challenge.git
 npm install
 ```
 
+3. Instale a versão 20.10.0 do Node.js:
+```bash
+nvm install 20.10.0
+nvm use 20.10.0
+```
+
 ## Como iniciar
 
 1. Inicie a aplicação com:

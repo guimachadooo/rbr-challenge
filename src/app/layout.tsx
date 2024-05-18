@@ -4,20 +4,18 @@ import React, { useState } from "react";
 
 import {
   Box,
-  ChakraProvider,
   Grid,
   GridItem,
-  Text,
   useMediaQuery,
+  ChakraProvider,
 } from "@chakra-ui/react";
+
 import { Inter } from "next/font/google";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import Footer from "./components/Footer";
 import { usePathname } from "next/navigation";
 import TanstackProvider from "@/components/TanstackProvider";
-
-import "./globals.css";
-import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -67,12 +65,13 @@ export default function RootLayout({
 
                 <GridItem pl="2" p="4" bg="gray.300" area={"nav"}>
                   <Sidebar
-                    variant={isMobile ? "drawer" : "sidebar"}
                     isOpen={isSidebarOpen}
                     onClose={toggleSidebar}
+                    variant={isMobile ? "drawer" : "sidebar"}
                   />
                 </GridItem>
 
+                {/* retorna o conteudo */}
                 <GridItem pl="2" bg="white" area={"main"}>
                   {children}
                 </GridItem>

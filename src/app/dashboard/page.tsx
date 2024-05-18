@@ -1,8 +1,8 @@
-"use client"; 
+"use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  Button, 
+  Button,
   Input,
   useToast,
   AlertDialog,
@@ -19,22 +19,27 @@ import {
   Box,
   Heading,
   useMediaQuery,
-  Text
-} from '@chakra-ui/react';
-import axios from 'axios';
-import Link from 'next/link';
-import { BASE_URL } from '@/constants/Employee';
-import { DataTable } from '@/components/DataTable';
-import { AddIcon, DeleteIcon, EditIcon, SearchIcon } from '@chakra-ui/icons';
+  Text,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+} from "@chakra-ui/react";
+import axios from "axios";
+import moment from "moment";
+import Link from "next/link";
+import { BASE_URL } from "@/constants/Employee";
+import { DataTable } from "@/components/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AddIcon, DeleteIcon, EditIcon, SearchIcon } from "@chakra-ui/icons";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export interface Employees{
-  _id: string,
-  name: string,
-  role: string,
-  department: string,
-  admissionDate: Date,
+export interface Employees {
+  _id: string;
+  name: string;
+  role: string;
+  department: string;
+  admissionDate: Date;
 }
 
 const DashboardPage: React.FC = () => {
@@ -47,16 +52,16 @@ const DashboardPage: React.FC = () => {
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
-  
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["employees"],
-    queryFn: async() => {
+    queryFn: async () => {
       const { data } = await axios.get(BASE_URL);
 
       setResults(data.employees);
-      
+
       return data.employees as Employees[];
-    }
+    },
   });
 
   const [results, setResults] = useState({} as any);
@@ -64,13 +69,12 @@ const DashboardPage: React.FC = () => {
   const handleId = (id: any) => {
     setRemovableId(id);
     onOpen();
-  }
+  };
 
-  const {mutate: deleteEmployee, isPending} = useMutation({
-    mutationFn: async () => { 
-      try{
-        axios.delete(BASE_URL + `?id=${removableId}`)
-        .then((res) => {
+  const { mutate: deleteEmployee, isPending } = useMutation({
+    mutationFn: async () => {
+      try {
+        axios.delete(BASE_URL + `?id=${removableId}`).then((res) => {
           toast({
             title: res.data.message,
             description: res.data.description,
@@ -82,8 +86,8 @@ const DashboardPage: React.FC = () => {
 
         onClose();
 
-        queryClient.invalidateQueries({queryKey: ['employees']});
-      }catch(err: any){
+        queryClient.invalidateQueries({ queryKey: ["employees"] });
+      } catch (err: any) {
         toast({
           title: err.message,
           status: "warning",
@@ -91,25 +95,25 @@ const DashboardPage: React.FC = () => {
           isClosable: true,
         });
       }
-    }
+    },
   });
-  
+
   const columnHelper = createColumnHelper<Employees>();
 
   const boxActions = (row: any) => (
     <div>
-      <Button 
-        as={Link} 
+      <Button
+        as={Link}
         disabled={isPending}
         mr={4}
         leftIcon={<EditIcon />}
-        href={`/edit-employee/${row._id}`}
+        href={`/employee/edit-employee/${row._id}`}
       >
         {!isMobile && "Editar"}
       </Button>
 
       <Button
-        colorScheme='red'
+        colorScheme="red"
         disabled={isPending}
         isLoading={isPending}
         leftIcon={<DeleteIcon />}
@@ -118,15 +122,16 @@ const DashboardPage: React.FC = () => {
       >
         {!isMobile && "Excluir"}
       </Button>
-    </div> 
-  )
-  
+    </div>
+  );
+
+  //colunas da table no desktop
   const columns = [
     columnHelper.accessor("name", {
       header: "Nome",
       cell: (info) => info.getValue(),
     }),
-    
+
     columnHelper.accessor("role", {
       header: "Cargo",
       cell: (info) => info.getValue(),
@@ -135,16 +140,21 @@ const DashboardPage: React.FC = () => {
       header: "Departamento",
       cell: (info) => info.getValue(),
     }),
+    columnHelper.accessor("admissionDate", {
+      header: "Data de admissão",
+      cell: (info) => moment(info.getValue()).format("DD/MM/YYYY"),
+    }),
     columnHelper.display({
       header: "Ações",
       cell: (props) => {
         let { original } = props.row;
 
         return boxActions(original as any);
-      }
+      },
     }),
   ];
 
+  //colunas da table no mobile
   const columnsMobile = [
     columnHelper.accessor("name", {
       header: "Nome",
@@ -156,10 +166,12 @@ const DashboardPage: React.FC = () => {
         let { original } = props.row;
 
         return boxActions(original as any);
-      }
+      },
     }),
   ];
 
+  //filtra os registros do lado do cliente
+  //buscando a string no array data, agilizando a pesquisa
   const handleSearch = (e: any) => {
     e.preventDefault();
 
@@ -167,75 +179,122 @@ const DashboardPage: React.FC = () => {
 
     const filter = (field: string) => {
       return field.toLowerCase().indexOf(value.toLowerCase()) > -1;
-    }
+    };
 
     let result = data?.filter((item) => {
       return filter(item.name) || filter(item.role) || filter(item.department);
     });
-    
-    if(value.length == 0){
+
+    //se o campo busca estiver vazio, retorna todos
+    //os registros, se não então irá setar o array 
+    //com os dados filtrados
+    if (value.length == 0) {
       setResults(data);
-    }else{
+    } else {
       setResults(result);
     }
-  }
+  };
 
-  if (isLoading) return (
-    <Stack>
-      <Skeleton height='20px' />
-      <Skeleton height='20px' />
-      <Skeleton height='20px' />
-    </Stack>
-  );
-  
-  if (isError) return <div>Erro, tente novamente.</div>;
+  if (isLoading)
+    return (
+      <Stack>
+        <Skeleton height="20px" />
+        <Skeleton height="20px" />
+        <Skeleton height="20px" />
+      </Stack>
+    );
+
+  if (isError)
+    return (
+      <div>
+        <h3>Erro, tente novamente.</h3>
+      </div>
+    );
 
   return (
     <div>
-      <Box p={4} mr={5} mb={22} display="flex" flexDirection={"row"} justifyContent={"space-between"}>
-        <Heading as='h3' size='lg'>
+      <Box
+        p={4}
+        mr={5}
+        mb={22}
+        display="flex"
+        flexDirection={"row"}
+        justifyContent={"space-between"}
+      >
+        <Heading as="h3" size="lg">
           Dashboard Funcionários
-          
-          {!isMobile && data?.length as any > 0 && (<Text fontSize='lg'>Total de {data?.length} registro{data?.length as any > 1 && "s"}.</Text>)}
+          {data?.length as any > 0 && (
+            <>
+              {!isMobile && (
+                <Text fontSize="lg">
+                  Total de {data?.length} registro{(data?.length as any) > 1 && "s"}
+                  .
+                </Text>
+              )}
+            </>
+          )}
         </Heading>
 
-        <Button 
-          as={Link} 
-          href="/add-employee"
-          bg="green.300"
+        <Button
+          as={Link}
           padding={8}
+          bg="green.300"
           variant="solid"
+          href="/employee/add-employee"
           _hover={{ bg: "green.400" }}
           leftIcon={<AddIcon />}
         >
           Adicionar Funcionário
         </Button>
       </Box>
-    
+
       <Box p={4} mr={6} mb={2} display="flex" flexDirection={"column"}>
         <InputGroup>
           <Input
             placeholder="Busque por nome, cargo ou departamento..."
             onChange={(e) => handleSearch(e)}
           />
-          <InputRightElement pointerEvents='none'>
-            <SearchIcon color='gray.300' />
+          <InputRightElement pointerEvents="none">
+            <SearchIcon color="gray.300" />
           </InputRightElement>
         </InputGroup>
       </Box>
 
       <Box mb={2} display="flex" flexDirection={"column"}>
-        <DataTable columns={isMobile ? columnsMobile : columns} data={results!} />
+        <DataTable
+          columns={isMobile ? columnsMobile : columns}
+          data={results!}
+        />
+
+        {data?.length as any == 0 && (
+          <Alert
+            status="info"
+            variant="subtle"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            textAlign="center"
+            height="200px"
+          >
+            <AlertIcon boxSize="40px" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              Nenhum registro.
+            </AlertTitle>
+            <AlertDescription maxWidth="sm">
+              Crie agora mesmo clicando em <br/> + Adicionar Funcionário.
+            </AlertDescription>
+          </Alert>
+        )}
       </Box>
 
       <AlertDialog
         isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
         onClose={onClose}
+        leastDestructiveRef={cancelRef}
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
               Excluir funcionário
             </AlertDialogHeader>
 
@@ -247,7 +306,8 @@ const DashboardPage: React.FC = () => {
               <Button ref={cancelRef} onClick={onClose}>
                 Cancelar
               </Button>
-              <Button colorScheme='red' onClick={() => deleteEmployee()} ml={3}>
+              
+              <Button colorScheme="red" onClick={() => deleteEmployee()} ml={3}>
                 Excluir
               </Button>
             </AlertDialogFooter>

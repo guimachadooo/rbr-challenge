@@ -25,12 +25,16 @@ interface Props {
 const Header = ({ showSidebarButton = true, onShowSidebar }: Props) => {
   return (
     <Box flex={1} bg={useColorModeValue("gray.100", "gray.900")} px={4}>
-      <Flex h={16} alignItems={"center"} justifyContent={showSidebarButton ? "flex-end" : "space-between"}>
+      <Flex
+        h={16}
+        alignItems={"center"}
+        justifyContent={showSidebarButton ? "flex-end" : "space-between"}
+      >
         {showSidebarButton ? (
           <Button
-            position="absolute"
             left="5%"
             bg="gray.400"
+            position="absolute"
             onClick={() => onShowSidebar()}
             leftIcon={<HamburgerIcon w={6} h={6} />}
           />
@@ -42,12 +46,12 @@ const Header = ({ showSidebarButton = true, onShowSidebar }: Props) => {
 
         <Flex>
           <Button
+            mr={4}
+            as={Link}
+            size={"sm"}
             variant={"solid"}
             colorScheme={"teal"}
-            size={"sm"}
-            mr={4}
             leftIcon={<EmailIcon />}
-            as={Link}
             href="mailto:dev.guimachado@gmail.com"
           >
             dev.guimachado@gmail.com
@@ -76,6 +80,7 @@ const Header = ({ showSidebarButton = true, onShowSidebar }: Props) => {
               >
                 LinkedIn
               </MenuItem>
+
               <MenuItem
                 as={Link}
                 href="https://instagram.com/guimachadooo"
@@ -83,9 +88,11 @@ const Header = ({ showSidebarButton = true, onShowSidebar }: Props) => {
               >
                 Instagram
               </MenuItem>
+
               <MenuDivider />
+
               <MenuItem>
-                <a href="/">
+                <a href="/" style={{ width: "100%" }}>
                   <CloseIcon /> Sair
                 </a>
               </MenuItem>

@@ -18,10 +18,10 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
-import { useParams, useRouter } from "next/navigation";
 import { BASE_URL } from "@/constants/Employee";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useParams, useRouter } from "next/navigation";
 import { ArrowBackIcon, CheckCircleIcon } from "@chakra-ui/icons";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface FormElements extends HTMLFormControlsCollection {
   name: HTMLInputElement;
@@ -39,7 +39,6 @@ const EditEmployeePage: React.FC = () => {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
-  const queryClient = useQueryClient();
   const [employee, setEmployee] = useState({
     _id: "",
     name: "",
@@ -48,12 +47,14 @@ const EditEmployeePage: React.FC = () => {
     admissionDate: "",
   });
 
+  //retorna os dados do funcionario
   const fetchUser = async (id: string) => {
     const { data } = await axios.get(BASE_URL + `/${id}`);
 
     let formattedDate = moment(data.employee.admissionDate).format(
       "YYYY-MM-DD"
     );
+
     data.employee.admissionDate = formattedDate;
     setEmployee(data.employee);
 
@@ -65,10 +66,12 @@ const EditEmployeePage: React.FC = () => {
     queryFn: async () => fetchUser(id),
   });
 
+  //define os novos valores dos campos
   const setValues = (field: string, e: any) => {
     setEmployee({ ...employee, [field]: e.target.value });
   };
 
+  //atualiza os dados passados
   const { mutate: handleUpdate, isPending } = useMutation({
     mutationFn: async (e: React.FormEvent<FormEmployee>) => {
       e.preventDefault();
@@ -111,23 +114,28 @@ const EditEmployeePage: React.FC = () => {
       </Box>
     );
 
-  if (isError) return <div>Erro, tente novamente.</div>;
+  if (isError)
+    return (
+      <div>
+        <h3>Erro, tente novamente.</h3>
+      </div>
+    );
 
   return (
     <div>
       <Box p={4}>
-      <Center>        
-        <Wrap>
-          <WrapItem>
-            <Avatar size='2xl' src="" mr={10} />
-          </WrapItem>
-        </Wrap>
+        <Center>
+          <Wrap>
+            <WrapItem>
+              <Avatar size="2xl" src="" mr={10} />
+            </WrapItem>
+          </Wrap>
 
-        <Heading as="h3" size="lg">
-          {employee.name} <br/>
-          <small>{employee.role}</small>
-        </Heading>
-      </Center>
+          <Heading as="h3" size="lg">
+            {employee.name} <br />
+            <small>{employee.role}</small>
+          </Heading>
+        </Center>
       </Box>
 
       <Box p={10}>
@@ -195,10 +203,10 @@ const EditEmployeePage: React.FC = () => {
               color="#fff"
               type="submit"
               bg="green.400"
-              isLoading={isPending}
               disabled={isPending}
-              _hover={{ bg: "green.500" }}
+              isLoading={isPending}
               loadingText="Salvando..."
+              _hover={{ bg: "green.500" }}
               leftIcon={<CheckCircleIcon />}
             >
               Salvar alterações

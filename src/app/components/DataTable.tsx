@@ -1,7 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { Table, Thead, Tbody, Tr, Th, Td, chakra, TableContainer } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  chakra,
+  TableContainer,
+} from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   useReactTable,
@@ -19,9 +28,8 @@ export type DataTableProps<Data extends object> = {
 
 export function DataTable<Data extends object>({
   data,
-  columns
+  columns,
 }: DataTableProps<Data>) {
-  
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
     columns,
@@ -30,8 +38,8 @@ export function DataTable<Data extends object>({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     state: {
-      sorting
-    }
+      sorting,
+    },
   });
 
   return (
@@ -70,18 +78,13 @@ export function DataTable<Data extends object>({
           ))}
         </Thead>
 
-        
         <Tbody>
           {table.getRowModel().rows.map((row) => (
             <Tr key={row.id}>
               {row.getVisibleCells().map((cell) => {
-                
                 return (
                   <Td key={cell.id}>
-                    {flexRender(
-                      cell.column.columnDef.cell, 
-                      cell.getContext()
-                    )}
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
                 );
               })}
