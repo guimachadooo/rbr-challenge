@@ -24,20 +24,20 @@ Uma dashboard com um crud de funcionários, com busca e ordenação de registros
 
 ## Instalação
 
-1. Clone the repository:
+1. Clone o repositório com:
 
 ```bash
 git clone https://github.com/guimachadooo/rbr-challenge.git
 ```
 
-2. Instale as dependências com 
+2. Instale as dependências com:
 ```bash
 npm install
 ```
 
 ## Como iniciar
 
-1. Inicie a aplicação com 
+1. Inicie a aplicação com:
 ```bash
 npm run dev
 ```

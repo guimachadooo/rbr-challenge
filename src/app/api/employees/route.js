@@ -34,5 +34,8 @@ export async function DELETE(request){
     await connectMongoDB();
     await Employee.findByIdAndDelete(id);
 
-    return NextResponse.json({ message: "Employee removed successfully"}, { status: 200 });
+    return NextResponse.json({ 
+        message: "Funcionário removido com sucesso!",
+        description: "When I see you again... 🎶" 
+    }, { status: 200 });
 }

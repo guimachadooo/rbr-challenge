@@ -2,9 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import {
+  Box,
   Button,
   FormControl,
   FormLabel,
+  Heading,
   Input,
   useToast,
 } from '@chakra-ui/react';
@@ -14,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { BASE_URL } from '@/constants/Employee';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
+import { ArrowBackIcon, CheckCircleIcon } from '@chakra-ui/icons';
 
 interface FormElements extends HTMLFormControlsCollection {
   name: HTMLInputElement,
@@ -63,7 +66,7 @@ const AddEmployeePage: React.FC = () => {
             isClosable: true,
           });
     
-          //router.push("/dashboard");
+          router.push("/dashboard");
           queryClient.invalidateQueries({queryKey: ['employees']});
         });
   
@@ -80,57 +83,81 @@ const AddEmployeePage: React.FC = () => {
 
   return (
     <div>
-      <h2>Adicionar Funcionário</h2>
-      
-      <Button as={Link} href="/dashboard">{'<'} Voltar</Button>
+      <Box p={4}>
+        <Heading as='h3' size='lg'>
+          Novo Funcionário
+        </Heading>
+      </Box>
 
-      <form action="post" onSubmit={submitEmployee}>
-        <FormControl isRequired>
-          <FormLabel>Nome</FormLabel>
-          <Input 
-            type="text" 
-            name="name"
-            onChange={(e) => setValues("name", e)}
-          />
-        </FormControl>
+      <Box p={10}>
+        <form action="post" onSubmit={submitEmployee}>
+          <FormControl isRequired>
+            <FormLabel>Nome</FormLabel>
+            <Input
+              type="text" 
+              name="name"
+              onChange={(e) => setValues("name", e)}
+            />
+          </FormControl><br/>
 
-        <FormControl isRequired>
-          <FormLabel>Cargo</FormLabel>
-          <Input 
-            type="text" 
-            name="role"
-            onChange={(e) => setValues("role", e)} 
-          />
-        </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Cargo</FormLabel>
+            <Input 
+              type="text" 
+              name="role"
+              onChange={(e) => setValues("role", e)} 
+            />
+          </FormControl><br/>
 
-        <FormControl isRequired>
-          <FormLabel>Departamento</FormLabel>
-          <Input 
-            type="text" 
-            name="department"
-            onChange={(e) => setValues("department", e)} 
-          />
-        </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Departamento</FormLabel>
+            <Input 
+              type="text" 
+              name="department"
+              onChange={(e) => setValues("department", e)} 
+            />
+          </FormControl><br/>
 
-        <FormControl isRequired>
-          <FormLabel>Data de Admissão</FormLabel>
-          <Input 
-            type="date" 
-            name="admissionDate"
-            value={newEmployee.admissionDate}
-            onChange={(e) => setValues("admissionDate", e)} 
-          />
-        </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Data de Admissão</FormLabel>
+            <Input 
+              type="date" 
+              name="admissionDate"
+              value={newEmployee.admissionDate}
+              onChange={(e) => setValues("admissionDate", e)} 
+            />
+          </FormControl>
 
-        <Button 
-          type="submit" 
-          disabled={isPending}
-          isLoading={isPending} 
-          loadingText="Adicionando..." 
-        >
-          Adicionar
-        </Button>
-      </form>
+          <Box mt={50}>
+            <a href="/dashboard">
+              <Button 
+                mr={4}
+                bg="red.400"
+                color="#fff"
+                disabled={isPending}
+                isLoading={isPending}
+                _hover={{bg: "red.500"}}
+                leftIcon={<ArrowBackIcon />}
+              >
+                Cancelar
+              </Button>
+            </a>
+
+            <Button 
+              color="#fff" 
+              type="submit"
+              bg="green.400"
+              disabled={isPending}
+              isLoading={isPending}
+              _hover={{bg: "green.500"}}
+              loadingText="Adicionando..." 
+              leftIcon={<CheckCircleIcon />} 
+            >
+              Adicionar
+            </Button>
+          </Box>
+        </form>
+      </Box>
     </div>
   );
 };
