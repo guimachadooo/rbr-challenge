@@ -43,11 +43,13 @@ nvm use 20.10.0
 
 ## Como iniciar
 
-1. Inicie a aplicação com:
+1. Renomeie o arquivo .env.example para .env
+
+2. Inicie a aplicação com:
 ```bash
 npm run dev
 ```
-2. Ela estará disponível em http://localhost:3000
+3. Ela estará disponível em http://localhost:3000
 
 
 ## API Endpoints
