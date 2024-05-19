@@ -20,8 +20,8 @@ import axios from "axios";
 import moment from "moment";
 import { BASE_URL } from "@/constants/Employee";
 import { useParams, useRouter } from "next/navigation";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowBackIcon, CheckCircleIcon } from "@chakra-ui/icons";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface FormElements extends HTMLFormControlsCollection {
   name: HTMLInputElement;
