@@ -209,7 +209,7 @@ const EditEmployeePage: React.FC = () => {
               _hover={{ bg: "green.500" }}
               leftIcon={<CheckCircleIcon />}
             >
-              Salvar alterações
+              Salvar
             </Button>
           </Box>
         </form>

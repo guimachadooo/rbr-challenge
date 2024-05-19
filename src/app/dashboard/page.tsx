@@ -24,6 +24,7 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
@@ -212,7 +213,7 @@ const DashboardPage: React.FC = () => {
     );
 
   return (
-    <div>
+    <SimpleGrid columns={{ base: 1, md: 1, lg: 1 }}>
       <Box
         p={4}
         mr={5}
@@ -237,14 +238,15 @@ const DashboardPage: React.FC = () => {
 
         <Button
           as={Link}
-          padding={8}
           bg="green.300"
           variant="solid"
+          leftIcon={<AddIcon />}
+          padding={isMobile ? 6 : 8}
           href="/employee/add-employee"
           _hover={{ bg: "green.400" }}
-          leftIcon={<AddIcon />}
+          style={{fontSize: isMobile ? "0.8em" : "1em"}}
         >
-          Adicionar Funcionário
+          {isMobile ? "Add" : "Adicionar"} Funcionário
         </Button>
       </Box>
 
@@ -314,7 +316,7 @@ const DashboardPage: React.FC = () => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
-    </div>
+    </SimpleGrid>
   );
 };
 
