@@ -42,8 +42,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <Script id="vwoCode" strategy="beforeInteractive">
             {`
-            var _vis_opt_url = 'https://rbr-challenge.vercel.app/employee/add-employee' 
+            _vis_opt_url = document.location.protocol + '//' + document.location.hostname +
+        document.location.pathname + "?preview_theme_id=123&" +
+        document.location.search.substring(1, ) + document.location.hash;
             window._vwo_code || (function() {
+            _vis_opt_url = window._vis_opt_url || document.URL,
               var account_id=912032,
               version=2.1,
               settings_tolerance=2000,
