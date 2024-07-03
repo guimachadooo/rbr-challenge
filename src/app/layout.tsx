@@ -43,7 +43,7 @@ export default function RootLayout({
         <Script id="vwoCode" strategy="beforeInteractive">
             {`
             _vis_opt_url = document.location.protocol + '//' + document.location.hostname +
-        document.location.pathname + "?preview_theme_id=123&" +
+        document.location.pathname + "?test=123&" +
         document.location.search.substring(1, ) + document.location.hash;
             window._vwo_code || (function() {
             _vis_opt_url = window._vis_opt_url || document.URL,
