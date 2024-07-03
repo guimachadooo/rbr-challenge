@@ -42,7 +42,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Script id="vwoCode" strategy="beforeInteractive">
             {`
-            _vis_opt_url = document.location.protocol + '//' + document.location.hostname +
+            var _vis_opt_url = document.location.protocol + '//' + document.location.hostname +
         document.location.pathname + "?test=123&" +
         document.location.search.substring(1, ) + document.location.hash;
             window._vwo_code || (function() {
