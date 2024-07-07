@@ -46,8 +46,8 @@ export default function RootLayout({
         document.location.pathname + "?test=123&" +
         document.location.search.substring(1, ) + document.location.hash;
             window._vwo_code || (function() {
-            _vis_opt_url = window._vis_opt_url || document.URL,
               var account_id=912032,
+            _vis_opt_url = window._vis_opt_url || document.URL,
               version=2.1,
               settings_tolerance=2000,
               hide_element='body',
